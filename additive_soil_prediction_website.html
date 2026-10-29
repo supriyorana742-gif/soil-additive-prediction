@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Soil Additive Predictor | Biochar & Banana Leaf</title>
+<style>
+:root{--bg:#f4f7f5;--panel:#fff;--ink:#172b25;--muted:#61716b;--line:#dce6df;--green:#1c7657;--green2:#e2f3e9;--orange:#b86a31;--shadow:0 10px 30px rgba(20,60,42,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(120deg,#123c30,#1d7657);color:white;padding:34px max(22px,calc((100% - 1180px)/2)) 30px}
+.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:800;opacity:.8}
+h1{font-size:clamp(27px,4vw,42px);line-height:1.12;margin:10px 0}header p{max-width:760px;color:#e0eee6;margin:10px 0 0}
+main{max-width:1180px;margin:24px auto;padding:0 18px 50px}.layout{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow);margin-bottom:18px}
+h2{font-size:18px;margin:0 0 5px}h3{font-size:14px;margin:0 0 12px}.sub{color:var(--muted);font-size:13px;margin:0 0 17px}
+.field{margin:18px 0}.field-head{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:13px}.val{color:var(--green);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--green);margin:12px 0 3px}input[type=number],select{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;background:white;color:var(--ink);font:inherit}
+.range-limits{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
+.btn{border:0;border-radius:10px;padding:11px 14px;font-weight:750;cursor:pointer;font:inherit}.primary{background:var(--green);color:white;width:100%}.secondary{background:#eef4f0;color:var(--ink)}
+.pills{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.pill{border:1px solid var(--line);border-radius:99px;padding:6px 10px;background:#fff;font-size:12px;cursor:pointer}.pill:hover{border-color:var(--green)}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.metric{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fcfdfc;min-width:0}.metric small{display:block;color:var(--muted);font-size:11px}.metric strong{display:block;font-size:22px;line-height:1.3;margin-top:5px;overflow-wrap:anywhere}.metric em{font-size:11px;color:var(--muted);font-style:normal}
+.section-head{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap;margin-bottom:15px}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:right;padding:9px 7px;border-bottom:1px solid #e8eeea;white-space:nowrap}th{color:var(--muted);font-weight:700;background:#f8faf8}th:first-child,td:first-child{text-align:left}tbody tr:last-child td{border-bottom:0}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px}
+.notice{background:#fff7e9;border:1px solid #f0dfbd;color:#6c4a21;padding:12px 14px;border-radius:11px;font-size:12px;margin-top:13px}
+.goodnote{background:var(--green2);border:1px solid #cde7d6;padding:12px 14px;border-radius:11px;font-size:12px;color:#22553e}
+#heatmap{display:grid;grid-template-columns:140px repeat(8,minmax(42px,1fr));gap:3px;overflow:auto;font-size:11px}
+.hm-head,.hm-label,.hm-cell{padding:8px 4px;text-align:center;border-radius:5px}.hm-head,.hm-label{background:#f0f5f1;color:#52635a;font-weight:700}.hm-label{text-align:left}.hm-cell{font-variant-numeric:tabular-nums;color:#17372a}
+.bars{display:grid;gap:10px}.barrow{display:grid;grid-template-columns:145px 1fr 55px;gap:9px;align-items:center;font-size:12px}.track{height:9px;background:#e9efeb;border-radius:99px;overflow:hidden}.fill{height:100%;border-radius:99px;background:var(--green)}
+footer{max-width:1180px;margin:auto;padding:0 18px 28px;color:var(--muted);font-size:12px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:16px}#heatmap{grid-template-columns:115px repeat(8,minmax(39px,1fr))}.barrow{grid-template-columns:120px 1fr 48px}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">Experimental data • Geotechnical materials</div><h1>Soil Additive Prediction Studio</h1><p>Explore how Biochar and Banana Leaf additive percentages relate to soil properties. Adjust the mix, estimate outcomes, and inspect correlations from the supplied results table.</p></header>
+<main>
+<div class="layout">
+<aside>
+<section class="card">
+<h2>Mix design</h2><p class="sub">Change the percentages to update predictions instantly.</p>
+<div class="field"><div class="field-head"><label for="bio">Biochar (%)</label><span class="val" id="biov">3.0%</span></div><input id="bio" type="range" min="0" max="12" step="0.5" value="3"><div class="range-limits"><span>0%</span><span>12%</span></div></div>
+<div class="field"><div class="field-head"><label for="banana">Banana Leaf (%)</label><span class="val" id="bananav">0.0%</span></div><input id="banana" type="range" min="0" max="12" step="0.5" value="0"><div class="range-limits"><span>0%</span><span>12%</span></div></div>
+<div class="pills"><button class="pill" data-b="0" data-n="0">Control</button><button class="pill" data-b="3" data-n="0">3% Biochar</button><button class="pill" data-b="0" data-n="3">3% Banana</button><button class="pill" data-b="3" data-n="3">3% + 3%</button><button class="pill" data-b="4.5" data-n="4.5">4.5% + 4.5%</button><button class="pill" data-b="6" data-n="6">6% + 6%</button></div>
+<button class="btn primary" id="reset">Reset to control</button>
+<div class="notice"><b>Model scope:</b> Predictions are estimates from a very small dataset (13 unique mix records). Use them for exploration, not as engineering design values.</div>
+</section>
+<section class="card"><h3>Model details</h3><div class="goodnote">A regularized multiple-regression model uses Biochar %, Banana Leaf %, and their interaction. Correlations are calculated from the recorded experimental rows.</div><p class="sub" style="margin:12px 0 0">The combined-mixture specific-gravity values are shown as missing in the source table (recorded as 0); they are excluded from training for that output rather than treated as real measurements.</p></section>
+</aside>
+<div>
+<section class="card">
+<div class="section-head"><div><h2>Predicted soil properties</h2><p class="sub" style="margin:4px 0 0">Model-estimated values for the selected mixture</p></div><span class="pill" id="mixlabel">3% Biochar · 0% Banana</span></div>
+<div class="metrics" id="metrics"></div>
+<div class="notice" id="extrapolation">Predictions are most defensible near the tested mixture combinations.</div>
+</section>
+<section class="card"><div class="section-head"><div><h2>Correlation heatmap</h2><p class="sub" style="margin:4px 0 0">Pearson correlation between mix percentages and measured properties</p></div></div><div id="heatmap"></div><p class="sub" style="margin:12px 0 0">Values range from −1 (negative association) to +1 (positive association). Correlation does not establish causation.</p></section>
+<section class="card"><h2>Property response profile</h2><p class="sub">Predictions shown as a percentage of each property's observed range, for visual comparison only.</p><div class="bars" id="bars"></div></section>
+<section class="card"><div class="section-head"><div><h2>Experimental data used</h2><p class="sub" style="margin:4px 0 0">Transcribed from your uploaded table; repeated control rows consolidated.</p></div><button class="btn secondary" id="download">Download CSV</button></div><div class="table-wrap"><table id="dataTable"></table></div></section>
+</div>
+</div>
+</main>
+<footer>Research prototype • Verify transcribed values against the original lab records before reporting results.</footer>
+<script>
+const cols=[
+['Liquid Limit (%)','ll'],['Plastic Limit (%)','pl'],['Plasticity Index (%)','pi'],['Specific Gravity','sg'],['OMC (%)','omc'],['MDD (g/cm³)','mdd'],['CBR (%)','cbr'],['UCS (kPa)','ucs']
+];
+// unique control plus Biochar-only, Banana-only, and equal combined mixtures
+const data=[
+{b:0,n:0,ll:26.41,pl:16.62,pi:9.79,sg:2.489,omc:24.9,mdd:1.444,cbr:3.86,ucs:10.3,group:'Control'},
+{b:3,n:0,ll:39.24,pl:17.13,pi:22.11,sg:2.236,omc:23.09,mdd:1.598,cbr:2.48,ucs:15.26,group:'Biochar'},
+{b:6,n:0,ll:37.45,pl:21.64,pi:15.81,sg:2.316,omc:23.03,mdd:1.482,cbr:3.035,ucs:14.42,group:'Biochar'},
+{b:9,n:0,ll:37.46,pl:23.22,pi:14.24,sg:2.1,omc:20.42,mdd:1.39,cbr:2.76,ucs:13.085,group:'Biochar'},
+{b:12,n:0,ll:37.35,pl:24.82,pi:12.53,sg:2.168,omc:28.59,mdd:1.155,cbr:3.035,ucs:12.065,group:'Biochar'},
+{b:0,n:3,ll:47.12,pl:27.94,pi:19.18,sg:2.2,omc:24.97,mdd:1.462,cbr:3.58,ucs:9.9,group:'Banana Leaf'},
+{b:0,n:6,ll:37.75,pl:33.55,pi:4.2,sg:1.93,omc:27.68,mdd:1.551,cbr:2.48,ucs:8.745,group:'Banana Leaf'},
+{b:0,n:9,ll:35.15,pl:33.59,pi:1.56,sg:2.239,omc:19.5,mdd:1.349,cbr:2.76,ucs:6.125,group:'Banana Leaf'},
+{b:0,n:12,ll:54.39,pl:37.5,pi:16.89,sg:2.09,omc:27.11,mdd:1.211,cbr:2.48,ucs:5.4,group:'Banana Leaf'},
+{b:1.5,n:1.5,ll:31.92,pl:21.45,pi:10.47,sg:null,omc:25.72,mdd:1.45,cbr:4.41,ucs:9.185,group:'Combined'},
+{b:3,n:3,ll:30.75,pl:28.44,pi:2.31,sg:null,omc:22.72,mdd:1.393,cbr:4.69,ucs:11.57,group:'Combined'},
+{b:4.5,n:4.5,ll:32.85,pl:31.3,pi:1.55,sg:null,omc:27.01,mdd:1.336,cbr:4.41,ucs:9.26,group:'Combined'},
+{b:6,n:6,ll:34.77,pl:32.77,pi:2,sg:null,omc:26.1,mdd:1.174,cbr:4.41,ucs:7.97,group:'Combined'}
+];
+const $=id=>document.getElementById(id);
+function solve(A,b){A=A.map((r,i)=>r.concat([b[i]]));let n=b.length;for(let i=0;i<n;i++){let max=i;for(let j=i+1;j<n;j++)if(Math.abs(A[j][i])>Math.abs(A[max][i]))max=j;[A[i],A[max]]=[A[max],A[i]];let d=A[i][i];if(Math.abs(d)<1e-12)continue;for(let k=i;k<=n;k++)A[i][k]/=d;for(let j=0;j<n;j++)if(j!==i){let f=A[j][i];for(let k=i;k<=n;k++)A[j][k]-=f*A[i][k]}}return A.map(r=>r[n])}
+function features(r){return [1,r.b/12,r.n/12,(r.b*r.n)/144]}
+function train(key){let rows=data.filter(r=>r[key]!=null);let X=rows.map(features),y=rows.map(r=>r[key]),p=4,lam=0.08;let A=Array.from({length:p},()=>Array(p).fill(0)),v=Array(p).fill(0);X.forEach((x,i)=>{for(let j=0;j<p;j++){v[j]+=x[j]*y[i];for(let k=0;k<p;k++)A[j][k]+=x[j]*x[k]}});for(let j=1;j<p;j++)A[j][j]+=lam;return solve(A,v)}
+const models=Object.fromEntries(cols.map(([label,key])=>[key,train(key)]));
+function predict(key,b,n){let f=features({b,n}),co=models[key];return f.reduce((s,x,i)=>s+x*co[i],0)}
+function fmt(v){return Number.isFinite(v)?v.toFixed(3):'—'}
+function pearson(a,b){let pairs=a.map((v,i)=>[v,b[i]]).filter(x=>x[1]!=null&&Number.isFinite(x[1]));if(pairs.length<2)return 0;let m=pairs.reduce((s,x)=>s+x[0],0)/pairs.length, n=pairs.reduce((s,x)=>s+x[1],0)/pairs.length;let num=0,da=0,db=0;pairs.forEach(([x,y])=>{num+=(x-m)*(y-n);da+=(x-m)**2;db+=(y-n)**2});return da&&db?num/Math.sqrt(da*db):0}
+function update(){let b=+$('bio').value,n=+$('banana').value;$('biov').textContent=b.toFixed(1)+'%';$('bananav').textContent=n.toFixed(1)+'%';$('mixlabel').textContent=b+'% Biochar · '+n+'% Banana';
+const exact=data.find(r=>Math.abs(r.b-b)<1e-9&&Math.abs(r.n-n)<1e-9);
+const getValue=key=>exact?(exact[key]===null?null:exact[key]):predict(key,b,n);
+$('metrics').innerHTML=cols.map(([label,key])=>`<div class="metric"><small>${label}</small><strong>${getValue(key)===null?'Not recorded':fmt(getValue(key))}</strong><em>${exact?'original experimental result':'model estimate'}</em></div>`).join('');
+$('extrapolation').textContent=exact?'Exact tested mixture selected: the website displays the values from your supplied table unchanged.':'This mix was not directly tested. Values are model estimates; choose a tested mixture to see its original values exactly.';
+renderHeat();renderBars(b,n,exact)}
+function renderHeat(){let vars=[['Biochar %',r=>r.b],['Banana %',r=>r.n],...cols.map(([l,k])=>[l,r=>r[k]])];let html='<div class="hm-head">Variable</div>'+vars.slice(0,8).map(v=>`<div class="hm-head">${v[0].replace(' (%)','')}</div>`).join('');vars.forEach(([name,fn])=>{html+=`<div class="hm-label">${name}</div>`;vars.slice(0,8).forEach(([name2,fn2])=>{let c=pearson(data.map(fn),data.map(fn2)),alpha=Math.abs(c),bg=c>=0?`rgba(31,126,83,${.08+.62*alpha})`:`rgba(190,91,57,${.08+.62*alpha})`;html+=`<div class="hm-cell" title="${name} vs ${name2}: ${c.toFixed(3)}" style="background:${bg}">${c.toFixed(2)}</div>`})});$('heatmap').innerHTML=html}
+function renderBars(b,n,exact){$('bars').innerHTML=cols.map(([label,key])=>{let vals=data.map(r=>r[key]).filter(v=>v!=null),min=Math.min(...vals),max=Math.max(...vals),v=exact?exact[key]:predict(key,b,n),pct=v===null?0:(max===min?50:Math.max(0,Math.min(100,(v-min)/(max-min)*100)));return `<div class="barrow"><span>${label}</span><div class="track"><div class="fill" style="width:${pct}%"></div></div><b>${v===null?'N/A':fmt(v)}</b></div>`}).join('')}
+function renderTable(){$('dataTable').innerHTML='<thead><tr><th>Mix (B + BL)</th>'+cols.map(c=>`<th>${c[0]}</th>`).join('')+'</tr></thead><tbody>'+data.map(r=>`<tr><td>${r.b}% + ${r.n}%</td>${cols.map(([l,k])=>`<td>${r[k]==null?'Missing':r[k]}</td>`).join('')}</tr>`).join('')+'</tbody>'}
+$('bio').addEventListener('input',update);$('banana').addEventListener('input',update);document.querySelectorAll('[data-b]').forEach(btn=>btn.addEventListener('click',()=>{$('bio').value=btn.dataset.b;$('banana').value=btn.dataset.n;update()}));$('reset').addEventListener('click',()=>{$('bio').value=0;$('banana').value=0;update()});
+$('download').addEventListener('click',()=>{let header=['Biochar %','Banana Leaf %',...cols.map(c=>c[0])];let rows=data.map(r=>[r.b,r.n,...cols.map(([l,k])=>r[k]??'')]);let csv=[header,...rows].map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='soil_additive_experimental_data.csv';a.click();URL.revokeObjectURL(a.href)});
+renderTable();update();
+</script>
+</body></html>
